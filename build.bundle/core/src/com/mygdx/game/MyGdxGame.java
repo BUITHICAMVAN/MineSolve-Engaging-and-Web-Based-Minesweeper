@@ -29,3 +29,4 @@ public class MyGdxGame extends ApplicationAdapter {
 		img.dispose();
 	}
 }
+aaaaaaaâ
