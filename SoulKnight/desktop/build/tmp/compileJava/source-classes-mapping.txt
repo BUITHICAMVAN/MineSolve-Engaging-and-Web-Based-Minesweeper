@@ -1,0 +1,2 @@
+com/badlogic/soulknight/desktop/DesktopLauncher.java
+ com.badlogic.soulknight.desktop.DesktopLauncher
