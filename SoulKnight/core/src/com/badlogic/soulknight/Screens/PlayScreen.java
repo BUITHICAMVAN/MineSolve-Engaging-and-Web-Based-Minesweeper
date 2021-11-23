@@ -1,6 +1,7 @@
 package com.badlogic.soulknight.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.soulknight.Scenes.Hud;
 import com.badlogic.soulknight.SoulKnight;
+import com.badlogic.soulknight.Sprites.Player;
 
 public class PlayScreen implements Screen {
     private SoulKnight game;
@@ -31,6 +33,7 @@ public class PlayScreen implements Screen {
 
     private World world;
     private Box2DDebugRenderer b2dr;
+    private Player player;
 
     public PlayScreen(SoulKnight game){
         this.game = game;
@@ -46,6 +49,8 @@ public class PlayScreen implements Screen {
 
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
+
+        player = new Player(world);
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -67,12 +72,39 @@ public class PlayScreen implements Screen {
     }
 
     public void handleInput(float dt){
-        if(Gdx.input.isTouched())
-            camera.position.x += 100 * dt;
+        boolean keyIsPressed = false;
+        if(Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 100){
+            player.b2body.applyLinearImpulse(new Vector2(16f, 0), player.b2body.getWorldCenter(), true);
+            keyIsPressed = true;
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.A) && player.b2body.getLinearVelocity().x >= -100) {
+            player.b2body.applyLinearImpulse(new Vector2(-16f, 0), player.b2body.getWorldCenter(), true);
+            keyIsPressed = true;
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.W) && player.b2body.getLinearVelocity().y <= 100) {
+            player.b2body.applyLinearImpulse(new Vector2(0, 16f), player.b2body.getWorldCenter(), true);
+            keyIsPressed = true;
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.S) && player.b2body.getLinearVelocity().y >= -100) {
+            player.b2body.applyLinearImpulse(new Vector2(0, -16f), player.b2body.getWorldCenter(), true);
+            keyIsPressed = true;
+        }
+
+        if(!keyIsPressed)
+            player.b2body.applyLinearImpulse(player.b2body.getLinearVelocity().scl((float) -0.2), player.b2body.getWorldCenter(), true);
+
     }
 
     public void update(float dt){
         handleInput(dt);
+
+        world.step(1/60f, 6, 2);
+
+        camera.position.x = player.b2body.getPosition().x;
+
+
 
         camera.update();
         renderer.setView(camera);
