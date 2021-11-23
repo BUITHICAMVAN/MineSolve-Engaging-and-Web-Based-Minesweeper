@@ -6,6 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -22,6 +24,10 @@ import com.badlogic.soulknight.SoulKnight;
 import com.badlogic.soulknight.Sprites.Player;
 
 public class PlayScreen implements Screen {
+    private SpriteBatch batch;
+    public Sprite sprite;
+    Texture texture;
+
     private SoulKnight game;
     private OrthographicCamera camera;
     private Viewport gamePort;
@@ -69,6 +75,11 @@ public class PlayScreen implements Screen {
             fdef.shape = shape;
             body.createFixture(fdef);
         }
+
+        batch = new SpriteBatch();
+
+        texture = new Texture("01-generic.png");
+        sprite = new Sprite(texture, 0, 0, 16, 16);
     }
 
     public void handleInput(float dt){
@@ -104,8 +115,6 @@ public class PlayScreen implements Screen {
 
         camera.position.x = player.b2body.getPosition().x;
 
-
-
         camera.update();
         renderer.setView(camera);
     }
@@ -128,6 +137,11 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 
         hud.stage.draw();
+
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        batch.draw(sprite, player.b2body.getPosition().x - 8, player.b2body.getPosition().y - 8);
+        batch.end();
     }
 
     @Override

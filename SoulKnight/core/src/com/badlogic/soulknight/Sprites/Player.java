@@ -1,6 +1,8 @@
 package com.badlogic.soulknight.Sprites;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Player extends Sprite {
@@ -24,5 +26,7 @@ public class Player extends Sprite {
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
+
     }
+
 }
