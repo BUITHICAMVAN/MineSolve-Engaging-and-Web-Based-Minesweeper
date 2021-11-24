@@ -1,8 +1,8 @@
-com/badlogic/soulknight/Sprites/Player.java
- com.badlogic.soulknight.Sprites.Player
-com/badlogic/soulknight/Scenes/Hud.java
- com.badlogic.soulknight.Scenes.Hud
 com/badlogic/soulknight/Screens/PlayScreen.java
  com.badlogic.soulknight.Screens.PlayScreen
 com/badlogic/soulknight/SoulKnight.java
  com.badlogic.soulknight.SoulKnight
+com/badlogic/soulknight/Scenes/Hud.java
+ com.badlogic.soulknight.Scenes.Hud
+com/badlogic/soulknight/Sprites/Player.java
+ com.badlogic.soulknight.Sprites.Player
