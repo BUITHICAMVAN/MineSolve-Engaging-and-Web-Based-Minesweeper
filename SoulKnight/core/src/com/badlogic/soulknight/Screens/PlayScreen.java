@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -25,6 +26,8 @@ import com.badlogic.soulknight.Tools.B2WorldCreator;
 
 public class PlayScreen implements Screen {
     private SoulKnight game;
+    private TextureAtlas atlas;
+
     private OrthographicCamera camera;
     private Viewport gamePort;
     private Hud hud;
@@ -38,6 +41,9 @@ public class PlayScreen implements Screen {
     private Player player;
 
     public PlayScreen(SoulKnight game){
+//        adding weapons pack
+        atlas  = new TextureAtlas("Weapons.pack");
+
         this.game = game;
         camera = new OrthographicCamera();
         gamePort = new FitViewport(SoulKnight.V_WIDTH, SoulKnight.V_HEIGHT, camera);
@@ -94,6 +100,9 @@ public class PlayScreen implements Screen {
         renderer.setView(camera);
     }
 
+    public TextureAtlas getAtlas() {
+        return atlas;
+    }
     @Override
     public void show() {
 
