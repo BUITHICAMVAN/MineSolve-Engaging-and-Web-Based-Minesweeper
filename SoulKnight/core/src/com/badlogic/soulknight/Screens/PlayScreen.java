@@ -28,26 +28,28 @@ public class PlayScreen implements Screen {
     private SoulKnight game;
     private TextureAtlas atlas;
 
+    //  viewport
     private OrthographicCamera camera;
     private Viewport gamePort;
     private Hud hud;
 
-    private TmxMapLoader mapLoader;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
+    private TmxMapLoader mapLoader; // load map tmx to the game
+    private TiledMap map; // reference to the map
+    private OrthogonalTiledMapRenderer renderer; // render the map to screen
 
+    //    create box2d world, b2s variables
     private World world;
     private Box2DDebugRenderer b2dr;
     private Player player;
 
     public PlayScreen(SoulKnight game){
-//        adding weapons pack
-        atlas  = new TextureAtlas("Weapons.pack");
-
+        atlas  = new TextureAtlas("Weapons.pack"); //adding weapons pack
         this.game = game;
-        camera = new OrthographicCamera();
+
+        camera = new OrthographicCamera(); //create the camera that follow the knight
+     // maintain virtual aspect ratio to make player screen viewport fixed
         gamePort = new FitViewport(SoulKnight.V_WIDTH, SoulKnight.V_HEIGHT, camera);
-        hud = new Hud(game.batch);
+        hud = new Hud(game.batch); //create HUD screen to display scores/timers/level
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("map.tmx");
@@ -63,6 +65,8 @@ public class PlayScreen implements Screen {
         player = new Player(world);
     }
 
+    //  setup the camera so that for each of the movement using W,A,S,D key
+    //  the camera will follow the knight
     public void handleInput(float dt){
         boolean keyIsPressed = false;
         if(Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 100){
@@ -113,7 +117,7 @@ public class PlayScreen implements Screen {
         update(delta);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+// render game map
         renderer.render();
 
         b2dr.render(world, camera.combined);
