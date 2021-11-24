@@ -7,6 +7,7 @@ import com.badlogic.soulknight.Screens.PlayScreen;
 public class SoulKnight extends Game {
 	public static final int V_WIDTH = 370;
 	public static final int V_HEIGHT = 208;
+//	SpriteBatch: hold images and textures
 	public SpriteBatch batch;
 	
 	@Override
