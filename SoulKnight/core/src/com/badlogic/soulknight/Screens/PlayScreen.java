@@ -22,12 +22,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.soulknight.Scenes.Hud;
 import com.badlogic.soulknight.SoulKnight;
 import com.badlogic.soulknight.Sprites.Player;
+import com.badlogic.soulknight.Tools.B2WorldCreator;
 
 public class PlayScreen implements Screen {
-    private SpriteBatch batch;
-    public Sprite sprite;
-    Texture texture;
-
     private SoulKnight game;
     private OrthographicCamera camera;
     private Viewport gamePort;
@@ -56,30 +53,9 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
 
+        new B2WorldCreator(world, map);
+
         player = new Player(world);
-
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
-
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
-        batch = new SpriteBatch();
-
-        texture = new Texture("01-generic.png");
-        sprite = new Sprite(texture, 0, 0, 16, 16);
     }
 
     public void handleInput(float dt){
@@ -137,11 +113,6 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 
         hud.stage.draw();
-
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        batch.draw(sprite, player.b2body.getPosition().x - 8, player.b2body.getPosition().y - 8);
-        batch.end();
     }
 
     @Override
@@ -166,6 +137,10 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        map.dispose();
+        renderer.dispose();
+        b2dr.dispose();
+        world.dispose();
+        hud.dispose();
     }
 }
