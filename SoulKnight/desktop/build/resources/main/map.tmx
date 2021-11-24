@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="36">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="41">
  <tileset firstgid="1" source="0x72_16x16DungeonTileset_walls.v2.tsx"/>
+ <tileset firstgid="257" source="Dungeon.tsx"/>
  <layer id="1" name="Background" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJzt1rENACAIRUHmdBwndwJDYYHoFdd/ipcwI2ICAK2NRPU+YE+/UOe0O/1Cnay/U9X3wcv0C335n+Ff+oW+9AsAAMCNFpjGH9s=
+   eJzt1rENACAIRUHmdBwmdwELEwqCXnH9p3gJGREJAIy2LnRvBM70C32qzekX+tz0V9V9I7xKvzCX/xn+pV+YS78wl34BAHjZBq7YHTM=
   </data>
  </layer>
  <layer id="3" name="Foreground" width="240" height="13">
   <data encoding="base64" compression="zlib">
-   eJzt07ENgzAQhlETWMAREyAWINl/tzhdhHTG3SHlPemrrrnmLwUAyDS1HkFz4l/Atdp6Bu0l3vZvQI7auUW7Pgfk6O0XuLfefpfWNhCQ47vfaJdr6zUQkOMo8S7fiX8BAAAA8L8+WAkHJA==
+   eJzt1jEKg0AQhtER06exFyUXSLxjzp21E8lswISsxXvwV4Js88FEAAAtdWVzsr7hu4DPprJHslvkbW8HtDFVvmVd77f37H78SOCtWr/AudX6vYT7Gc5s7Tfrcohj9/PV/Qx/cY+8y+XgP0f9AgAAAPCFF8MJDAs=
   </data>
  </layer>
  <objectgroup id="4" name="Walls">
@@ -17,5 +18,11 @@
   <object id="33" x="64" y="128" width="96" height="16"/>
   <object id="34" x="160" y="112" width="160" height="16"/>
   <object id="35" x="160" y="64" width="160" height="16"/>
+ </objectgroup>
+ <objectgroup id="5" name="Pick up">
+  <object id="36" x="384" y="112" width="16" height="32"/>
+ </objectgroup>
+ <objectgroup id="6" name="Consumable">
+  <object id="37" x="384" y="64" width="16" height="16"/>
  </objectgroup>
 </map>

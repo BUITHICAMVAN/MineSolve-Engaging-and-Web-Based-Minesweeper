@@ -22,92 +22,42 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.soulknight.Scenes.Hud;
 import com.badlogic.soulknight.SoulKnight;
 import com.badlogic.soulknight.Sprites.Player;
+import com.badlogic.soulknight.Tools.B2WorldCreator;
 
 public class PlayScreen implements Screen {
-    private SpriteBatch batch;
-    public Sprite sprite;
-    Texture texture;
-
     private SoulKnight game;
-//    viewport
     private OrthographicCamera camera;
     private Viewport gamePort;
     private Hud hud;
 
-//    load the map tmx to the game
     private TmxMapLoader mapLoader;
-//    reference to map
     private TiledMap map;
-//    render the map to the screen
     private OrthogonalTiledMapRenderer renderer;
 
-//  world
-    //	bodies
-    //		mass
-    //		velocity
-    //		location
-    //		angles
-    //		fixtures (physical attributes)
-    //			shape
-    //			density
-    //			friction
-    //			restitution (bounciness)
-
-//    create box2d world, b2s variables
     private World world;
     private Box2DDebugRenderer b2dr;
     private Player player;
 
     public PlayScreen(SoulKnight game){
         this.game = game;
-//        create the camera that follow the knight
         camera = new OrthographicCamera();
-
-//        maintain virtual aspect ratio to make player screen viewport fixed
         gamePort = new FitViewport(SoulKnight.V_WIDTH, SoulKnight.V_HEIGHT, camera);
-
-//        create HUD screen to display scores/timers/level
         hud = new Hud(game.batch);
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("map.tmx");
-//        render our map to the screen
         renderer = new OrthogonalTiledMapRenderer(map);
 
         camera.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-//      world with no gravity (0, 0), doSleep: body is at rest at first
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
 
+        new B2WorldCreator(world, map);
+
         player = new Player(world);
-
-        BodyDef bdef = new BodyDef(); // define body
-        PolygonShape shape = new PolygonShape(); // for the fixtures
-        FixtureDef fdef = new FixtureDef(); // define fixtures
-        Body body;
-
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
-        batch = new SpriteBatch();
-
-        texture = new Texture("01-generic.png");
-        sprite = new Sprite(texture, 0, 0, 16, 16);
     }
 
-//  setup the camera so that for each of the movement using W,A,S,D key
-//  the camera will follow the knight
     public void handleInput(float dt){
         boolean keyIsPressed = false;
         if(Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 100){
@@ -160,15 +110,9 @@ public class PlayScreen implements Screen {
 
         b2dr.render(world, camera.combined);
 
-//        camera position and its composition
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 
         hud.stage.draw();
-
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        batch.draw(sprite, player.b2body.getPosition().x - 8, player.b2body.getPosition().y - 8);
-        batch.end();
     }
 
     @Override
@@ -193,6 +137,10 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        map.dispose();
+        renderer.dispose();
+        b2dr.dispose();
+        world.dispose();
+        hud.dispose();
     }
 }
