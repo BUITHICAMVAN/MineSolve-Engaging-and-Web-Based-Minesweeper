@@ -6,6 +6,8 @@ com/badlogic/soulknight/Sprites/Destructible.java
  com.badlogic.soulknight.Sprites.Destructible
 com/badlogic/soulknight/SoulKnight.java
  com.badlogic.soulknight.SoulKnight
+com/badlogic/soulknight/Sprites/Weapon.java
+ com.badlogic.soulknight.Sprites.Weapon
 com/badlogic/soulknight/Scenes/Hud.java
  com.badlogic.soulknight.Scenes.Hud
 com/badlogic/soulknight/Tools/B2WorldCreator.java
