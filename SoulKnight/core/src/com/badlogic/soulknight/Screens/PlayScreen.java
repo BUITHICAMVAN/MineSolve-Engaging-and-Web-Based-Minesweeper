@@ -4,17 +4,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -26,6 +19,7 @@ import com.badlogic.soulknight.Tools.B2WorldCreator;
 
 public class PlayScreen implements Screen {
     private SoulKnight game;
+    // loads images from TexturePacker
     private TextureAtlas atlas;
 
     //  viewport
@@ -43,11 +37,12 @@ public class PlayScreen implements Screen {
     private Player player;
 
     public PlayScreen(SoulKnight game){
+        //put the String to the pack file of image package
         atlas  = new TextureAtlas("Weapons.pack"); //adding weapons pack
         this.game = game;
 
         camera = new OrthographicCamera(); //create the camera that follow the knight
-     // maintain virtual aspect ratio to make player screen viewport fixed
+        // maintain virtual aspect ratio to make player screen viewport fixed
         gamePort = new FitViewport(SoulKnight.V_WIDTH, SoulKnight.V_HEIGHT, camera);
         hud = new Hud(game.batch); //create HUD screen to display scores/timers/level
 
@@ -62,7 +57,8 @@ public class PlayScreen implements Screen {
 
         new B2WorldCreator(world, map);
 
-        player = new Player(world);
+        //create knight in game world
+        player = new Player(world, this);
     }
 
     //  setup the camera so that for each of the movement using W,A,S,D key
@@ -96,8 +92,12 @@ public class PlayScreen implements Screen {
     public void update(float dt){
         handleInput(dt);
 
+//        take 1 step
         world.step(1/60f, 6, 2);
 
+        player.update(dt);
+
+//        attach gamecam to players.x coordinate
         camera.position.x = player.b2body.getPosition().x;
 
         camera.update();
@@ -107,6 +107,7 @@ public class PlayScreen implements Screen {
     public TextureAtlas getAtlas() {
         return atlas;
     }
+
     @Override
     public void show() {
 
@@ -119,9 +120,15 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 // render game map
         renderer.render();
-
+//render Box2DDebugLines
         b2dr.render(world, camera.combined);
 
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+        player.draw(game.batch);
+        game.batch.end();
+
+//        set batch to draw what Hud camera sees
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 
         hud.stage.draw();

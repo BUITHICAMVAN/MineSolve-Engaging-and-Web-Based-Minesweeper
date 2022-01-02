@@ -30,3 +30,4 @@ public class InteractiveTileObject {
         body.createFixture(fdef);
     }
 }
+
