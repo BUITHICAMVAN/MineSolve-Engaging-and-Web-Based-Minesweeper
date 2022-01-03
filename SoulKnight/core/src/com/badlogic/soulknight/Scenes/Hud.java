@@ -21,6 +21,7 @@ public class Hud implements Disposable {
     private float timeCount;
     private int health;
 
+    // Scenes 2D widgets
     Label countdownLabel;
     Label healthLabel;
     Label timeLabel;
@@ -29,18 +30,24 @@ public class Hud implements Disposable {
     Label soulKnightLabel;
 
     public Hud (SpriteBatch sb){
+//        define tracking variables which are displayed on HUD screen
         worldTimer = 300;
         timeCount = 0;
-        health = 6;
+        health = 10;
+
+//        setup HUD viewport using a new camera seperate from the gamecame (HUD screen remains still)
         viewport = new FitViewport(SoulKnight.V_WIDTH, SoulKnight.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
 
+
+        // define a table to organize hud's labels: put all tracking information in one rectangle box
         Table table = new Table();
         table.top(); // display sprites at the top of the page
         table.setFillParent(true); // set the table to the size of the page
 
+        // setup label display
         countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        healthLabel = new Label(String.format("%d/6", health), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        healthLabel = new Label(String.format("%d/10", health), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         levelLabel = new Label("1-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("World",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -67,7 +74,7 @@ public class Hud implements Disposable {
     }
 
     public void update(){
-        healthLabel.setText(String.format("%d/6", health));
+        healthLabel.setText(String.format("%d/10", health));
     }
 
     @Override

@@ -29,7 +29,7 @@ public class Monster extends Sprite{
 
     protected Integer reward;
 
-    private int health = 6;
+    private int health = 10;
 
     private OrthographicCamera camera;
 

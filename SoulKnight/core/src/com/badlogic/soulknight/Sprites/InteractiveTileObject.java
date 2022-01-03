@@ -16,11 +16,12 @@ public class InteractiveTileObject {
         this.map = map;
         this.bounds = bounds;
 
+        // create bdef fixture
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
 
-        bdef.type = BodyDef.BodyType.StaticBody;
+        bdef.type = BodyDef.BodyType.StaticBody; // staic at first
         bdef.position.set(bounds.getX() + bounds.getWidth() / 2, bounds.getY() + bounds.getHeight() / 2);
 
         body = world.createBody(bdef);
