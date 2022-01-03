@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="240" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="127">
- <tileset firstgid="1" source="0x72_16x16DungeonTileset_walls.v2.tsx"/>
- <tileset firstgid="257" source="Dungeon.tsx"/>
+ <tileset firstgid="1" source="E:/Soul-Knight-Clone-main/Soul-Knight-Clone/SoulKnight/core/assets/0x72_16x16DungeonTileset_walls.v2.tsx"/>
+ <tileset firstgid="257" source="E:/Soul-Knight-Clone-main/Soul-Knight-Clone/SoulKnight/core/assets/Dungeon.tsx"/>
  <layer id="1" name="Background" width="240" height="13">
   <data encoding="base64" compression="zlib">
    eJztzrENAAAIA6De3stdPcEYBnaapAAAAAAAAACw5MABAAAAgF8GLiEwOQ==
