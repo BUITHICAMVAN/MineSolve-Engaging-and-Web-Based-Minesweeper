@@ -52,7 +52,6 @@ public class Player extends Sprite {
             bulletBody.createFixture(fdef).setUserData("bullet");
 
             bulletBody.setLinearVelocity(new Vector2(mousePos.x, mousePos.y).add(b2body.getWorldCenter().scl(-1)).nor().scl(50));
-            Gdx.app.log(String.valueOf(mousePos.x), "");
         }
     }
 

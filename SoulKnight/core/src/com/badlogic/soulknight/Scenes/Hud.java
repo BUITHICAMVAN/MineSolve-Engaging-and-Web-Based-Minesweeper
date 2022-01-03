@@ -63,8 +63,11 @@ public class Hud implements Disposable {
     public void healthUpdate(int damage){
         if(health > 0) {
             health -= damage;
-            healthLabel.setText(String.format("%d/6", health));
         }
+    }
+
+    public void update(){
+        healthLabel.setText(String.format("%d/6", health));
     }
 
     @Override

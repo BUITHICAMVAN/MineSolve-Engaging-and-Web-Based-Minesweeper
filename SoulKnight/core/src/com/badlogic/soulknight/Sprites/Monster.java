@@ -1,14 +1,11 @@
 package com.badlogic.soulknight.Sprites;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.soulknight.Screens.PlayScreen;
+import com.badlogic.soulknight.Tools.WorldContactListener;
 
 public class Monster extends Sprite{
 
@@ -32,7 +29,13 @@ public class Monster extends Sprite{
 
     protected Integer reward;
 
+    private int health = 6;
+
     private OrthographicCamera camera;
+
+    SpriteBatch spriteBatch = new SpriteBatch();;
+    BitmapFont font = new BitmapFont();;
+    CharSequence str = "Monster";
 
 
     public World world;
@@ -49,6 +52,8 @@ public class Monster extends Sprite{
         //setRegion(characterStand);
         this.camera = camera;
 
+
+        font.getData().setScale(0.5f);
     }
 
     private void setBounds(int i, int i1, int i2) {
@@ -57,14 +62,8 @@ public class Monster extends Sprite{
     public void update(float dt) {
 //        set position for knight and body2box
         setPosition(b2body.getWorldCenter().x, b2body.getWorldCenter().y);
-        SpriteBatch spriteBatch;
-        BitmapFont font;
-        CharSequence str = "Monster";
-        spriteBatch = new SpriteBatch();
-        font = new BitmapFont();
 
         spriteBatch.setProjectionMatrix(camera.combined);
-        font.getData().setScale(0.5f);
         spriteBatch.begin();
         font.draw(spriteBatch, str, b2body.getWorldCenter().x - 13, b2body.getWorldCenter().y + 15);
         spriteBatch.end();
@@ -83,7 +82,20 @@ public class Monster extends Sprite{
         fdef.shape = shape;
         fdef.filter.categoryBits = 8;
 
-        b2body.createFixture(fdef).setUserData("monster");
+        b2body.createFixture(fdef).setUserData(this);
     }
 
+    public void healthUpdate(int damage){
+        if(health > 0)
+            health -= damage;
+
+        if(health == 0)
+            isDead();
+    }
+
+    private void isDead(){
+        //Gdx.app.log("Im dead", "");
+        WorldContactListener.bodiesToDestroy.add(b2body);
+        str = "";
+    }
 }

@@ -2,7 +2,6 @@ package com.badlogic.soulknight.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -40,7 +39,7 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
     private Player player;
     private Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-    private WorldContactListener worldContactListener = new WorldContactListener();
+    private WorldContactListener worldContactListener;
     private Monster monster;
 
     public PlayScreen(SoulKnight game){
@@ -69,6 +68,7 @@ public class PlayScreen implements Screen {
         player = new Player(world, this, mousePos);
         monster = new Monster(world, this, camera);
 
+        worldContactListener = new WorldContactListener(hud);
         world.setContactListener(worldContactListener);
     }
 
@@ -107,14 +107,12 @@ public class PlayScreen implements Screen {
         world.step(1/60f, 6, 2);
 
         if(!world.isLocked())
-            for(Body body : worldContactListener.bulletsToDestroy)
+            for(Body body : worldContactListener.bodiesToDestroy)
                 world.destroyBody(body);
 
-        worldContactListener.bulletsToDestroy.clear();
+        worldContactListener.bodiesToDestroy.clear();
 
         player.update(dt);
-
-        hud.healthUpdate(1);
 
 //        attach gamecam to players.x coordinate
         camera.position.x = player.b2body.getPosition().x;
@@ -125,6 +123,8 @@ public class PlayScreen implements Screen {
 
         camera.update();
         renderer.setView(camera);
+
+        hud.update();
     }
 
     public TextureAtlas getAtlas() {

@@ -8,8 +8,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new SoulKnight(), config);
 		config.title = "Soul Knight";
-		config.width = 370;
-		config.height = 208;
+		config.width = 1600;
+		config.height = 900;
 		config.forceExit = false;
 	}
 }
