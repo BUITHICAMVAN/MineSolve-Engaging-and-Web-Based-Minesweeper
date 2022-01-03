@@ -20,3 +20,4 @@ public class SoulKnight extends Game {
 		super.render();
 	}
 }
+
