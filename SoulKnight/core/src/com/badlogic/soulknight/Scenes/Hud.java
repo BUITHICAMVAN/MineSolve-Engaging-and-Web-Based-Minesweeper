@@ -19,10 +19,10 @@ public class Hud implements Disposable {
     // what should be display on the HUD screen
     private int worldTimer;
     private float timeCount;
-    private int score;
+    private int health;
 
     Label countdownLabel;
-    Label scoreLabel;
+    Label healthLabel;
     Label timeLabel;
     Label levelLabel;
     Label worldLabel;
@@ -31,7 +31,7 @@ public class Hud implements Disposable {
     public Hud (SpriteBatch sb){
         worldTimer = 300;
         timeCount = 0;
-        score = 0;
+        health = 6;
         viewport = new FitViewport(SoulKnight.V_WIDTH, SoulKnight.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
 
@@ -40,7 +40,7 @@ public class Hud implements Disposable {
         table.setFillParent(true); // set the table to the size of the page
 
         countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        scoreLabel = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        healthLabel = new Label(String.format("%d/6", health), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         levelLabel = new Label("1-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("World",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -53,11 +53,18 @@ public class Hud implements Disposable {
         table.add(timeLabel).expandX().padTop(10);
 
         table.row();
-        table.add(scoreLabel).expandX();
+        table.add(healthLabel).expandX();
         table.add(levelLabel).expandX();
         table.add(countdownLabel).expandX();
 
         stage.addActor(table);
+    }
+
+    public void healthUpdate(int damage){
+        if(health > 0) {
+            health -= damage;
+            healthLabel.setText(String.format("%d/6", health));
+        }
     }
 
     @Override

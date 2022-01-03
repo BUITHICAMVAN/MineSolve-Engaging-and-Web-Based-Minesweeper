@@ -2,6 +2,7 @@ package com.badlogic.soulknight.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -9,13 +10,16 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.soulknight.Scenes.Hud;
 import com.badlogic.soulknight.SoulKnight;
+import com.badlogic.soulknight.Sprites.Monster;
 import com.badlogic.soulknight.Sprites.Player;
 import com.badlogic.soulknight.Tools.B2WorldCreator;
+import com.badlogic.soulknight.Tools.WorldContactListener;
 
 public class PlayScreen implements Screen {
     private SoulKnight game;
@@ -35,6 +39,9 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private Player player;
+    private Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+    private WorldContactListener worldContactListener = new WorldContactListener();
+    private Monster monster;
 
     public PlayScreen(SoulKnight game){
         //put the String to the pack file of image package
@@ -52,13 +59,17 @@ public class PlayScreen implements Screen {
 
         camera.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
+
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
 
         new B2WorldCreator(world, map);
 
         //create knight in game world
-        player = new Player(world, this);
+        player = new Player(world, this, mousePos);
+        monster = new Monster(world, this, camera);
+
+        world.setContactListener(worldContactListener);
     }
 
     //  setup the camera so that for each of the movement using W,A,S,D key
@@ -80,7 +91,7 @@ public class PlayScreen implements Screen {
             keyIsPressed = true;
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S) && player.b2body.getLinearVelocity().y >= -100) {
-            player.b2body.applyLinearImpulse(new Vector2(0, -16f), player.b2body.getWorldCenter(), true);
+            player.b2body.applyLinearImpulse(new Vector2(0, -16f), player.b2body.getWorldCenter().add(new Vector2(10f, -10f)), true);
             keyIsPressed = true;
         }
 
@@ -95,10 +106,22 @@ public class PlayScreen implements Screen {
 //        take 1 step
         world.step(1/60f, 6, 2);
 
+        if(!world.isLocked())
+            for(Body body : worldContactListener.bulletsToDestroy)
+                world.destroyBody(body);
+
+        worldContactListener.bulletsToDestroy.clear();
+
         player.update(dt);
+
+        hud.healthUpdate(1);
 
 //        attach gamecam to players.x coordinate
         camera.position.x = player.b2body.getPosition().x;
+
+        mousePos.x = Gdx.input.getX();
+        mousePos.y = Gdx.input.getY();
+        camera.unproject(mousePos);
 
         camera.update();
         renderer.setView(camera);
@@ -120,9 +143,10 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 // render game map
         renderer.render();
+        monster.update(delta);
 //render Box2DDebugLines
         b2dr.render(world, camera.combined);
-
+        /*
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         player.draw(game.batch);
@@ -130,7 +154,7 @@ public class PlayScreen implements Screen {
 
 //        set batch to draw what Hud camera sees
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-
+*/
         hud.stage.draw();
     }
 
