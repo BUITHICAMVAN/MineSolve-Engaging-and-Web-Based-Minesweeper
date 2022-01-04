@@ -2,6 +2,7 @@ package com.badlogic.soulknight.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -42,6 +43,8 @@ public class PlayScreen implements Screen {
     private WorldContactListener worldContactListener;
     private Monster monster;
 
+    private Music music;
+
     public PlayScreen(SoulKnight game){
         //put the String to the pack file of image package
         atlas  = new TextureAtlas("Weapons.pack"); //adding weapons pack
@@ -70,6 +73,10 @@ public class PlayScreen implements Screen {
 
         worldContactListener = new WorldContactListener(hud);
         world.setContactListener(worldContactListener);
+
+        music = SoulKnight.manager.get("audio/music/Dungeon.mp3");
+        music.setLooping(true);
+        music.play();
     }
 
     //  setup the camera so that for each of the movement using W,A,S,D key
