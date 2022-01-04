@@ -167,14 +167,24 @@ public class PlayScreen implements Screen {
 */
         hud.stage.draw();
 
-        if (Player.gameOver){
-            SpriteBatch spriteBatch = new SpriteBatch();
-            Texture texture = new Texture("game-over-typography-pic-1600x900.jpg");
-            Sprite sprite = new Sprite(texture, 0, 0, 1600, 900);
+        SpriteBatch spriteBatch = new SpriteBatch();
+        spriteBatch.setProjectionMatrix(camera.combined);
+        Texture texture = new Texture("01-generic.png");
+        Sprite sprite = new Sprite(texture, 0, 0, 16, 16);
+        sprite.setPosition(player.b2body.getWorldCenter().x - 8, player.b2body.getWorldCenter().y - 8);
 
-            spriteBatch.begin();
-            sprite.draw(spriteBatch);
-            spriteBatch.end();
+        spriteBatch.begin();
+        sprite.draw(spriteBatch);
+        spriteBatch.end();
+
+        if (Player.gameOver){
+            SpriteBatch spriteBatch2 = new SpriteBatch();
+            Texture textureGO = new Texture("game-over-typography-pic-1600x900.jpg");
+            Sprite spriteGO = new Sprite(textureGO, 0, 0, 1600, 900);
+
+            spriteBatch2.begin();
+            spriteGO.draw(spriteBatch2);
+            spriteBatch2.end();
 
             music.pause();
 
@@ -182,6 +192,8 @@ public class PlayScreen implements Screen {
             music.setLooping(true);
             music.play();
         }
+
+
     }
 
     @Override

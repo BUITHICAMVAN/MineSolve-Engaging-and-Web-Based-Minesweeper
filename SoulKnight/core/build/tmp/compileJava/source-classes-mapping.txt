@@ -6,6 +6,10 @@ com/badlogic/soulknight/Sprites/InteractiveTileObject.java
  com.badlogic.soulknight.Sprites.InteractiveTileObject
 com/badlogic/soulknight/Sprites/Destructible.java
  com.badlogic.soulknight.Sprites.Destructible
+com/badlogic/soulknight/Scenes/Hud.java
+ com.badlogic.soulknight.Scenes.Hud
+com/badlogic/soulknight/Tools/WorldContactListener.java
+ com.badlogic.soulknight.Tools.WorldContactListener
 com/badlogic/soulknight/Sprites/Monster.java
  com.badlogic.soulknight.Sprites.Monster
 com/badlogic/soulknight/Screens/PlayScreen.java
@@ -14,9 +18,5 @@ com/badlogic/soulknight/SoulKnight.java
  com.badlogic.soulknight.SoulKnight
 com/badlogic/soulknight/Sprites/Weapon.java
  com.badlogic.soulknight.Sprites.Weapon
-com/badlogic/soulknight/Tools/WorldContactListener.java
- com.badlogic.soulknight.Tools.WorldContactListener
-com/badlogic/soulknight/Scenes/Hud.java
- com.badlogic.soulknight.Scenes.Hud
 com/badlogic/soulknight/Sprites/Player.java
  com.badlogic.soulknight.Sprites.Player
