@@ -20,7 +20,6 @@ public class Hud implements Disposable {
     // what should be display on the HUD screen
     private int worldTimer;
     private float timeCount;
-    private float timer;
 
     // Scenes 2D widgets
     Label countdownLabel;
@@ -70,10 +69,10 @@ public class Hud implements Disposable {
     public void update(float dt){
         healthLabel.setText(String.format("HP %d/10", Player.health));
 
-        timer += dt;
+        timeCount += dt;
 
-        if(timer > 1){
-            timer = 0;
+        if(timeCount > 1){
+            timeCount = 0;
             countdownLabel.setText(String.format("%03d", --worldTimer));
         }
     }
