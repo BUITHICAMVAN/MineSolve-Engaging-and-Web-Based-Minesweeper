@@ -5,6 +5,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -82,29 +85,29 @@ public class PlayScreen implements Screen {
     //  setup the camera so that for each of the movement using W,A,S,D key
     //  the camera will follow the knight
     public void handleInput(float dt){
-        boolean keyIsPressed = false;
-        if(Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 100){
-            player.b2body.applyLinearImpulse(new Vector2(16f, 0), player.b2body.getWorldCenter(), true);
-            keyIsPressed = true;
-        }
+        if(Player.gameOver == false) {
+            boolean keyIsPressed = false;
+            if (Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 100) {
+                player.b2body.applyLinearImpulse(new Vector2(16f, 0), player.b2body.getWorldCenter(), true);
+                keyIsPressed = true;
+            }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.A) && player.b2body.getLinearVelocity().x >= -100) {
-            player.b2body.applyLinearImpulse(new Vector2(-16f, 0), player.b2body.getWorldCenter(), true);
-            keyIsPressed = true;
-        }
+            if (Gdx.input.isKeyPressed(Input.Keys.A) && player.b2body.getLinearVelocity().x >= -100) {
+                player.b2body.applyLinearImpulse(new Vector2(-16f, 0), player.b2body.getWorldCenter(), true);
+                keyIsPressed = true;
+            }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.W) && player.b2body.getLinearVelocity().y <= 100) {
-            player.b2body.applyLinearImpulse(new Vector2(0, 16f), player.b2body.getWorldCenter(), true);
-            keyIsPressed = true;
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.S) && player.b2body.getLinearVelocity().y >= -100) {
-            player.b2body.applyLinearImpulse(new Vector2(0, -16f), player.b2body.getWorldCenter().add(new Vector2(10f, -10f)), true);
-            keyIsPressed = true;
-        }
+            if (Gdx.input.isKeyPressed(Input.Keys.W) && player.b2body.getLinearVelocity().y <= 100) {
+                player.b2body.applyLinearImpulse(new Vector2(0, 16f), player.b2body.getWorldCenter(), true);
+                keyIsPressed = true;
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S) && player.b2body.getLinearVelocity().y >= -100) {
+                player.b2body.applyLinearImpulse(new Vector2(0, -16f), player.b2body.getWorldCenter().add(new Vector2(10f, -10f)), true);
+                keyIsPressed = true;
+            }
 
-        if(!keyIsPressed)
-            player.b2body.applyLinearImpulse(player.b2body.getLinearVelocity().scl((float) -0.2), player.b2body.getWorldCenter(), true);
-
+            if (!keyIsPressed)
+                player.b2body.applyLinearImpulse(player.b2body.getLinearVelocity().scl((float) -0.2), player.b2body.getWorldCenter(), true);
+        }
     }
 
     public void update(float dt){
@@ -131,7 +134,7 @@ public class PlayScreen implements Screen {
         camera.update();
         renderer.setView(camera);
 
-        hud.update();
+        hud.update(dt);
     }
 
     public TextureAtlas getAtlas() {
@@ -163,6 +166,22 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 */
         hud.stage.draw();
+
+        if (Player.gameOver){
+            SpriteBatch spriteBatch = new SpriteBatch();
+            Texture texture = new Texture("game-over-typography-pic-1600x900.jpg");
+            Sprite sprite = new Sprite(texture, 0, 0, 1600, 900);
+
+            spriteBatch.begin();
+            sprite.draw(spriteBatch);
+            spriteBatch.end();
+
+            music.pause();
+
+            music = SoulKnight.manager.get("audio/music/LivingRoom.mp3", Music.class);
+            music.setLooping(true);
+            music.play();
+        }
     }
 
     @Override

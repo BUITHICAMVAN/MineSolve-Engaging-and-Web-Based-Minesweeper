@@ -3,6 +3,7 @@ package com.badlogic.soulknight.Tools;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.soulknight.Scenes.Hud;
 import com.badlogic.soulknight.Sprites.Monster;
+import com.badlogic.soulknight.Sprites.Player;
 
 import java.util.ArrayList;
 
@@ -33,14 +34,24 @@ public class WorldContactListener implements ContactListener {
             Fixture object = fixA.getUserData() != "player" ? fixA : fixB;
 
             if(object.getUserData() != null && object.getUserData() instanceof Monster)
-                hud.healthUpdate(1);
+                Player.setAttacked(true);
 
         }
     }
 
     @Override
     public void endContact(Contact contact) {
+        Fixture fixA = contact.getFixtureA();
+        Fixture fixB = contact.getFixtureB();
 
+        if((fixA.getUserData() == "player" || fixB.getUserData() == "player")){
+            Fixture player = fixA.getUserData() == "player" ? fixA : fixB;
+            Fixture object = fixA.getUserData() != "player" ? fixA : fixB;
+
+            if(object.getUserData() != null && object.getUserData() instanceof Monster)
+                Player.setAttacked(false);
+
+        }
     }
 
     @Override

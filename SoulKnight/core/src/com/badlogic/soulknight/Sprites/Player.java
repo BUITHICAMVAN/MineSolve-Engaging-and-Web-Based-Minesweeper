@@ -1,5 +1,7 @@
 package com.badlogic.soulknight.Sprites;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +14,13 @@ public class Player extends Sprite {
     public Body b2body;
     private Vector3 mousePos;
     private float timer;
+    private float ICD;
+    private static boolean isAttacked = false;
+    public static Vector2 currentPos;
     //private final TextureRegion characterStand;
+
+    public static int health = 10;
+    public static boolean gameOver = false;
 
     public Player (World world, PlayScreen screen, Vector3 vector){
         //super(screen.getAtlas().findRegion("KnightTexture"));
@@ -25,15 +33,20 @@ public class Player extends Sprite {
         //setRegion(characterStand);
     }
 
+    public static void setAttacked(boolean attacked) {
+        isAttacked = attacked;
+    }
+
     private void setBounds(int i, int i1, int i2) {
     }
 
-    public void update(float dt ) {
+    public void update(float dt) {
 //        set position for knight and body2box
         setPosition(b2body.getWorldCenter().x, b2body.getWorldCenter().y);
         timer += dt;
+        currentPos = b2body.getWorldCenter();
 
-        if(Gdx.input.isTouched() && timer > 0.3){
+        if(Gdx.input.isTouched() && timer > 0.3 && !gameOver){
             timer = 0;
             Body bulletBody;
             BodyDef bulletDef = new BodyDef();
@@ -51,9 +64,17 @@ public class Player extends Sprite {
             fdef.filter.maskBits = 1 | 8;
             bulletBody.createFixture(fdef).setUserData("bullet");
 
-            bulletBody.setLinearVelocity(new Vector2(mousePos.x, mousePos.y).add(b2body.getWorldCenter().scl(-1)).nor().scl(140));
+            bulletBody.setLinearVelocity(new Vector2(mousePos.x, mousePos.y).add(b2body.getWorldCenter().scl(-1)).nor().scl(180));
+        }
+
+        ICD += dt;
+        if(isAttacked && ICD > 0.6){
+            healthUpdate(1);
+            ICD = 0;
         }
     }
+
+
 
     public void defineCharacter(){
         BodyDef bdef = new BodyDef();
@@ -71,4 +92,16 @@ public class Player extends Sprite {
         b2body.createFixture(fdef).setUserData("player");
     }
 
+    public static void healthUpdate(int damage){
+        if(health > 0) {
+            health -= damage;
+        }
+
+        if(health == 0)
+            gameOver();
+    }
+
+    public static void gameOver(){
+        gameOver = true;
+    }
 }

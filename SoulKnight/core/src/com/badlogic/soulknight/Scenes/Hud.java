@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.soulknight.SoulKnight;
+import com.badlogic.soulknight.Sprites.Player;
 
 // class Hud displays world time, onscreen-controller button, bullet capacity, health, warnings,...
 public class Hud implements Disposable {
@@ -19,7 +20,7 @@ public class Hud implements Disposable {
     // what should be display on the HUD screen
     private int worldTimer;
     private float timeCount;
-    private int health;
+    private float timer;
 
     // Scenes 2D widgets
     Label countdownLabel;
@@ -33,7 +34,6 @@ public class Hud implements Disposable {
 //        define tracking variables which are displayed on HUD screen
         worldTimer = 666;
         timeCount = 0;
-        health = 10;
 
 //        setup HUD viewport using a new camera seperate from the gamecame (HUD screen remains still)
         viewport = new FitViewport(SoulKnight.V_WIDTH, SoulKnight.V_HEIGHT, new OrthographicCamera());
@@ -47,7 +47,7 @@ public class Hud implements Disposable {
 
         // setup label display
         countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        healthLabel = new Label(String.format("HP %d/10", health), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        healthLabel = new Label(String.format("HP %d/10", Player.health), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         levelLabel = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("Dungeon 1",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -67,14 +67,15 @@ public class Hud implements Disposable {
         stage.addActor(table);
     }
 
-    public void healthUpdate(int damage){
-        if(health > 0) {
-            health -= damage;
-        }
-    }
+    public void update(float dt){
+        healthLabel.setText(String.format("HP %d/10", Player.health));
 
-    public void update(){
-        healthLabel.setText(String.format("HP %d/10", health));
+        timer += dt;
+
+        if(timer > 1){
+            timer = 0;
+            countdownLabel.setText(String.format("%03d", --worldTimer));
+        }
     }
 
     @Override

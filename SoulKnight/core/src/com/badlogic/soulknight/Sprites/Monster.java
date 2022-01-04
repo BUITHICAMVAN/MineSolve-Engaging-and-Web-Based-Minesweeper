@@ -1,8 +1,10 @@
 package com.badlogic.soulknight.Sprites;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.soulknight.Screens.PlayScreen;
 import com.badlogic.soulknight.Tools.WorldContactListener;
@@ -37,6 +39,7 @@ public class Monster extends Sprite{
     BitmapFont font = new BitmapFont();;
     CharSequence str = "Monster";
 
+    private boolean isDead = false;
 
     public World world;
     public Body b2body;
@@ -60,13 +63,22 @@ public class Monster extends Sprite{
     }
 
     public void update(float dt) {
+        if (!isDead) {
 //        set position for knight and body2box
-        setPosition(b2body.getWorldCenter().x, b2body.getWorldCenter().y);
+            setPosition(b2body.getWorldCenter().x, b2body.getWorldCenter().y);
 
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.begin();
-        font.draw(spriteBatch, str, b2body.getWorldCenter().x - 13, b2body.getWorldCenter().y + 15);
-        spriteBatch.end();
+            spriteBatch.setProjectionMatrix(camera.combined);
+            spriteBatch.begin();
+            font.draw(spriteBatch, str, b2body.getWorldCenter().x - 13, b2body.getWorldCenter().y + 15);
+            spriteBatch.end();
+
+            Vector2 distanceToPlayer = b2body.getWorldCenter().add(Player.currentPos.scl(-1));
+
+            if (distanceToPlayer.len() < 80 && distanceToPlayer.len() > 10)
+                b2body.setLinearVelocity(distanceToPlayer.nor().scl(-35));
+            else
+                b2body.setLinearVelocity(Vector2.Zero);
+        }
     }
 
     public void defineCharacter(){
@@ -95,6 +107,7 @@ public class Monster extends Sprite{
 
     private void isDead(){
         //Gdx.app.log("Im dead", "");
+        isDead = true;
         WorldContactListener.bodiesToDestroy.add(b2body);
         str = "";
     }
