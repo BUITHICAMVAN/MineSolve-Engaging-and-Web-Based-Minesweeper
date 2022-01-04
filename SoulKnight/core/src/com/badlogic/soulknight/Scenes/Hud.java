@@ -31,7 +31,7 @@ public class Hud implements Disposable {
 
     public Hud (SpriteBatch sb){
 //        define tracking variables which are displayed on HUD screen
-        worldTimer = 300;
+        worldTimer = 666;
         timeCount = 0;
         health = 10;
 
@@ -47,11 +47,11 @@ public class Hud implements Disposable {
 
         // setup label display
         countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        healthLabel = new Label(String.format("%d/10", health), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        healthLabel = new Label(String.format("HP %d/10", health), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        levelLabel = new Label("1-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        worldLabel = new Label("World",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        soulKnightLabel = new Label("Soul Knight", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        levelLabel = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        worldLabel = new Label("Dungeon 1",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        soulKnightLabel = new Label("Knight", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         // add to table
         // expandX: labels will be displayed at the whole screen width
@@ -61,7 +61,7 @@ public class Hud implements Disposable {
 
         table.row();
         table.add(healthLabel).expandX();
-        table.add(levelLabel).expandX();
+        table.add().expandX();
         table.add(countdownLabel).expandX();
 
         stage.addActor(table);
@@ -74,7 +74,7 @@ public class Hud implements Disposable {
     }
 
     public void update(){
-        healthLabel.setText(String.format("%d/10", health));
+        healthLabel.setText(String.format("HP %d/10", health));
     }
 
     @Override

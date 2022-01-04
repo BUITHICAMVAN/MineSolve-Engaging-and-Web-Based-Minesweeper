@@ -33,7 +33,7 @@ public class Player extends Sprite {
         setPosition(b2body.getWorldCenter().x, b2body.getWorldCenter().y);
         timer += dt;
 
-        if(Gdx.input.isTouched() && timer > 0.5){
+        if(Gdx.input.isTouched() && timer > 0.3){
             timer = 0;
             Body bulletBody;
             BodyDef bulletDef = new BodyDef();
@@ -51,7 +51,7 @@ public class Player extends Sprite {
             fdef.filter.maskBits = 1 | 8;
             bulletBody.createFixture(fdef).setUserData("bullet");
 
-            bulletBody.setLinearVelocity(new Vector2(mousePos.x, mousePos.y).add(b2body.getWorldCenter().scl(-1)).nor().scl(50));
+            bulletBody.setLinearVelocity(new Vector2(mousePos.x, mousePos.y).add(b2body.getWorldCenter().scl(-1)).nor().scl(140));
         }
     }
 
