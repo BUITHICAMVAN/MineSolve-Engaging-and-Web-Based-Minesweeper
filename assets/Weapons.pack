@@ -1,0 +1,131 @@
+
+Weapons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Weapons/Wand
+  rotate: false
+  xy: 1, 48
+  size: 21, 71
+  orig: 21, 71
+  offset: 0, 0
+  index: -1
+Weapons/Sniper
+  rotate: false
+  xy: 24, 81
+  size: 84, 38
+  orig: 84, 38
+  offset: 0, 0
+  index: -1
+Weapons/SniperReverse
+  rotate: false
+  xy: 110, 81
+  size: 84, 38
+  orig: 84, 38
+  offset: 0, 0
+  index: -1
+Weapons/TowerBullet
+  rotate: false
+  xy: 196, 84
+  size: 35, 35
+  orig: 35, 35
+  offset: 0, 0
+  index: -1
+Weapons/SniperBullet
+  rotate: false
+  xy: 196, 73
+  size: 29, 9
+  orig: 29, 9
+  offset: 0, 0
+  index: -1
+Weapons/RangerBullet
+  rotate: false
+  xy: 227, 56
+  size: 28, 26
+  orig: 28, 26
+  offset: 0, 0
+  index: -1
+Weapons/SMGBullet
+  rotate: false
+  xy: 233, 99
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+Weapons/normalGunBullet
+  rotate: false
+  xy: 233, 90
+  size: 15, 7
+  orig: 15, 7
+  offset: 0, 0
+  index: -1
+Weapons/OldPistolBullet
+  rotate: false
+  xy: 233, 90
+  size: 15, 7
+  orig: 15, 7
+  offset: 0, 0
+  index: -1
+Weapons/OldPistol
+  rotate: false
+  xy: 24, 41
+  size: 60, 38
+  orig: 60, 38
+  offset: 0, 0
+  index: -1
+Weapons/ShotgunBullet
+  rotate: false
+  xy: 1, 28
+  size: 18, 18
+  orig: 18, 18
+  offset: 0, 0
+  index: -1
+Weapons/SMG
+  rotate: false
+  xy: 86, 45
+  size: 75, 34
+  orig: 75, 34
+  offset: 0, 0
+  index: -1
+Weapons/Shotgun
+  rotate: false
+  xy: 163, 36
+  size: 80, 18
+  orig: 80, 18
+  offset: 0, 0
+  index: -1
+Weapons/SMGReverse
+  rotate: false
+  xy: 86, 9
+  size: 75, 34
+  orig: 75, 34
+  offset: 0, 0
+  index: -1
+Weapons/Fish
+  rotate: false
+  xy: 163, 59
+  size: 60, 12
+  orig: 60, 12
+  offset: 0, 0
+  index: -1
+Weapons/OldPistolReverse
+  rotate: false
+  xy: 21, 1
+  size: 60, 38
+  orig: 60, 38
+  offset: 0, 0
+  index: -1
+Weapons/ShotgunReverse
+  rotate: false
+  xy: 163, 16
+  size: 80, 18
+  orig: 80, 18
+  offset: 0, 0
+  index: -1
+Weapons/FishReverse
+  rotate: false
+  xy: 163, 2
+  size: 60, 12
+  orig: 60, 12
+  offset: 0, 0
+  index: -1
