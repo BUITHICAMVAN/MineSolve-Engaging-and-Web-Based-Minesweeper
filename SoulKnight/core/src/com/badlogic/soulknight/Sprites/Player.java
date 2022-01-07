@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.soulknight.SoulKnight;
 import com.badlogic.soulknight.Tools.Contactable;
+import com.badlogic.soulknight.Tools.Gun;
 import com.badlogic.soulknight.Tools.Info;
 
 public class Player extends Sprite implements Contactable {
@@ -35,12 +36,14 @@ public class Player extends Sprite implements Contactable {
     //private final TextureRegion characterStand;
 
     public int health = 10;
+    private Gun currentGun;
+    private Pistol pistol = new Pistol();
+    private Shotgun shotgun = new Shotgun();
 
     //Movement variables
     private final float SPEED_ACCELERATION = 16f;
     private final float MAX_SPEED = 85f;
 
-    Music attackSound = SoulKnight.manager.get("audio/sounds/BulletSound.wav");
 
     public boolean gameOver = false;
 
@@ -57,7 +60,7 @@ public class Player extends Sprite implements Contactable {
 
         info = new Info("player");
 
-        attackSound.setVolume(0.6f);
+        currentGun = pistol;
     }
 
     @Override
@@ -102,6 +105,7 @@ public class Player extends Sprite implements Contactable {
             handleInput();
             attack(dt);
             takeDamage(dt);
+            switchWeapon();
         }
 
         render();
@@ -146,10 +150,16 @@ public class Player extends Sprite implements Contactable {
 
         if(Gdx.input.isTouched() && timer > 0.7 && !gameOver){
             timer = 0;
-            new Bullet(world, currentPos, new Vector2(mousePos.x, mousePos.y).add(currentPos.scl(-1)).nor().scl(250));
-
-            attackSound.play();
+            currentGun.fire(world, currentPos, new Vector2(mousePos.x, mousePos.y).scl(-1).add(currentPos).scl(-1).nor());
         }
+    }
+
+    void switchWeapon(){
+        if(Gdx.input.isKeyPressed(Input.Keys.Q))
+            if(currentGun instanceof Shotgun)
+                currentGun = pistol;
+            else
+                currentGun = shotgun;
     }
 
     void takeDamage(float dt){

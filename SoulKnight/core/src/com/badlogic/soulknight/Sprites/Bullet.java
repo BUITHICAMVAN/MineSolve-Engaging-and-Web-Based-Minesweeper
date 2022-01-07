@@ -11,9 +11,16 @@ public class Bullet implements Contactable {
     private Info info;
     public Body bulletBody;
 
-    public Bullet(World world, Vector2 startPos, Vector2 direction){
+    private int damage;
+    private int range;
+
+    public Bullet(World world, Vector2 startPos, Vector2 direction, int damage, int range){
+        this.damage = damage;
+        this.range = range;
+
         BodyDef bulletDef = new BodyDef();
-        bulletDef.position.set(startPos.scl(-1));
+        bulletDef.position.set(startPos);
+
         bulletDef.type = BodyDef.BodyType.DynamicBody;
         bulletBody = world.createBody(bulletDef);
 
@@ -28,8 +35,12 @@ public class Bullet implements Contactable {
         bulletBody.createFixture(fdef).setUserData(this);
 
         bulletBody.setLinearVelocity(direction);
-
+        Gdx.app.log(String.valueOf(direction), "");
         info = new Info("bullet");
+    }
+
+    public void update(){
+
     }
 
     @Override
@@ -40,7 +51,7 @@ public class Bullet implements Contactable {
 
         if(objInfo != null)
             if (objInfo.getType() == "monster")
-            ((Monster) object).healthUpdate(1);
+            ((Monster) object).healthUpdate(damage);
     }
 
     @Override

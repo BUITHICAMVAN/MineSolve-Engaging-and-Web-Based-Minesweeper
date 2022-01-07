@@ -1,28 +1,36 @@
-com/badlogic/soulknight/Screens/PlayScreen.java
- com.badlogic.soulknight.Screens.PlayScreen
-com/badlogic/soulknight/Sprites/Pickup.java
- com.badlogic.soulknight.Sprites.Pickup
-com/badlogic/soulknight/Scenes/Hud.java
- com.badlogic.soulknight.Scenes.Hud
-com/badlogic/soulknight/Tools/B2WorldCreator.java
- com.badlogic.soulknight.Tools.B2WorldCreator
-com/badlogic/soulknight/Tools/Info.java
- com.badlogic.soulknight.Tools.Info
-com/badlogic/soulknight/Sprites/Monster.java
- com.badlogic.soulknight.Sprites.Monster
-com/badlogic/soulknight/Sprites/InteractiveTileObject.java
- com.badlogic.soulknight.Sprites.InteractiveTileObject
-com/badlogic/soulknight/Sprites/Bullet.java
- com.badlogic.soulknight.Sprites.Bullet
-com/badlogic/soulknight/Tools/WorldContactListener.java
- com.badlogic.soulknight.Tools.WorldContactListener
-com/badlogic/soulknight/Tools/Contactable.java
- com.badlogic.soulknight.Tools.Contactable
-com/badlogic/soulknight/Sprites/Player.java
- com.badlogic.soulknight.Sprites.Player
 com/badlogic/soulknight/Screens/GameOverScreen.java
  com.badlogic.soulknight.Screens.GameOverScreen
-com/badlogic/soulknight/Screens/IntroScreen.java
- com.badlogic.soulknight.Screens.IntroScreen
+com/badlogic/soulknight/Sprites/Pickup.java
+ com.badlogic.soulknight.Sprites.Pickup
+com/badlogic/soulknight/Sprites/InteractiveTileObject.java
+ com.badlogic.soulknight.Sprites.InteractiveTileObject
+com/badlogic/soulknight/Tools/WorldContactListener.java
+ com.badlogic.soulknight.Tools.WorldContactListener
 com/badlogic/soulknight/SoulKnight.java
  com.badlogic.soulknight.SoulKnight
+com/badlogic/soulknight/Screens/IntroScreen.java
+ com.badlogic.soulknight.Screens.IntroScreen
+com/badlogic/soulknight/Tools/Info.java
+ com.badlogic.soulknight.Tools.Info
+com/badlogic/soulknight/Tools/B2WorldCreator.java
+ com.badlogic.soulknight.Tools.B2WorldCreator
+com/badlogic/soulknight/Tools/Detail.java
+ com.badlogic.soulknight.Tools.Detail
+com/badlogic/soulknight/Tools/Contactable.java
+ com.badlogic.soulknight.Tools.Contactable
+com/badlogic/soulknight/Tools/Gun.java
+ com.badlogic.soulknight.Tools.Gun
+com/badlogic/soulknight/Sprites/Monster.java
+ com.badlogic.soulknight.Sprites.Monster
+com/badlogic/soulknight/Screens/PlayScreen.java
+ com.badlogic.soulknight.Screens.PlayScreen
+com/badlogic/soulknight/Scenes/Hud.java
+ com.badlogic.soulknight.Scenes.Hud
+com/badlogic/soulknight/Sprites/Bullet.java
+ com.badlogic.soulknight.Sprites.Bullet
+com/badlogic/soulknight/Sprites/Pistol.java
+ com.badlogic.soulknight.Sprites.Pistol
+com/badlogic/soulknight/Sprites/Shotgun.java
+ com.badlogic.soulknight.Sprites.Shotgun
+com/badlogic/soulknight/Sprites/Player.java
+ com.badlogic.soulknight.Sprites.Player
