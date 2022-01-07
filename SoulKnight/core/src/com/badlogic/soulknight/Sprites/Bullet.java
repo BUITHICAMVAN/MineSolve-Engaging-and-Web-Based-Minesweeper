@@ -35,7 +35,7 @@ public class Bullet implements Contactable {
         bulletBody.createFixture(fdef).setUserData(this);
 
         bulletBody.setLinearVelocity(direction);
-        Gdx.app.log(String.valueOf(direction), "");
+
         info = new Info("bullet");
     }
 
@@ -51,7 +51,7 @@ public class Bullet implements Contactable {
 
         if(objInfo != null)
             if (objInfo.getType() == "monster")
-            ((Monster) object).healthUpdate(damage);
+                ((Monster) object).healthUpdate(damage);
     }
 
     @Override

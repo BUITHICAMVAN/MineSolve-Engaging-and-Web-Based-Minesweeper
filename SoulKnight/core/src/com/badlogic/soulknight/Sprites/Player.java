@@ -36,6 +36,7 @@ public class Player extends Sprite implements Contactable {
     //private final TextureRegion characterStand;
 
     public int health = 10;
+    private float switchTimer = 0;
     private Gun currentGun;
     private Pistol pistol = new Pistol();
     private Shotgun shotgun = new Shotgun();
@@ -105,7 +106,7 @@ public class Player extends Sprite implements Contactable {
             handleInput();
             attack(dt);
             takeDamage(dt);
-            switchWeapon();
+            switchWeapon(dt);
         }
 
         render();
@@ -148,18 +149,23 @@ public class Player extends Sprite implements Contactable {
     void attack(float dt){
         timer += dt;
 
-        if(Gdx.input.isTouched() && timer > 0.7 && !gameOver){
+        if(Gdx.input.isTouched() && timer > currentGun.getFirerate() && !gameOver){
             timer = 0;
             currentGun.fire(world, currentPos, new Vector2(mousePos.x, mousePos.y).scl(-1).add(currentPos).scl(-1).nor());
         }
     }
 
-    void switchWeapon(){
-        if(Gdx.input.isKeyPressed(Input.Keys.Q))
-            if(currentGun instanceof Shotgun)
+    void switchWeapon(float dt){
+        switchTimer += dt;
+
+        if(Gdx.input.isKeyPressed(Input.Keys.Q) && switchTimer > 0.2f) {
+            switchTimer = 0;
+
+            if (currentGun instanceof Shotgun)
                 currentGun = pistol;
             else
                 currentGun = shotgun;
+        }
     }
 
     void takeDamage(float dt){

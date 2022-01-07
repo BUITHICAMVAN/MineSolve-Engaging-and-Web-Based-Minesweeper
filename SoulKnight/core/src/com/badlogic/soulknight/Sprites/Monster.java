@@ -1,5 +1,6 @@
 package com.badlogic.soulknight.Sprites;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -90,12 +91,11 @@ public class Monster extends Sprite implements Contactable {
         if(health > 0)
             health -= damage;
 
-        if(health == 0)
+        if(health <= 0)
             isDead();
     }
 
     private void isDead(){
-        //Gdx.app.log("Im dead", "");
         isDead = true;
         PlayScreen.addBodyToDestroy(b2body);
         str = "";
