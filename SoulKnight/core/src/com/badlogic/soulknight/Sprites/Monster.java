@@ -1,87 +1,46 @@
 package com.badlogic.soulknight.Sprites;
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.soulknight.Screens.PlayScreen;
-import com.badlogic.soulknight.Tools.WorldContactListener;
+import com.badlogic.soulknight.Tools.Contactable;
+import com.badlogic.soulknight.Tools.Info;
 
-public class Monster extends Sprite{
-
-    protected Integer monsterType;
-
-    protected String monsterId;
-
-    protected Integer x;
-
-    protected Integer y;
-
-    protected Double angle;
-
-    protected Integer speed;
-
-    protected Integer blood;
-
-    protected Integer CD;
-
-    protected Integer visibility;
-
-    protected Integer reward;
+public class Monster extends Sprite implements Contactable {
+    public World world;
+    public Body b2body;
 
     private int health = 10;
+    private final float SPEED = 35f;
+    private final float RANGE = 80f;
 
     private OrthographicCamera camera;
 
-    SpriteBatch spriteBatch = new SpriteBatch();;
-    BitmapFont font = new BitmapFont();;
+    SpriteBatch spriteBatch = new SpriteBatch();
+    BitmapFont font = new BitmapFont();
     CharSequence str = "Monster";
 
     private boolean isDead = false;
 
-    public World world;
-    public Body b2body;
-    //private final TextureRegion characterStand;
+    private Info info;
 
-    public Monster (World world, PlayScreen screen, OrthographicCamera camera){
-        //super(screen.getAtlas().findRegion("KnightTexture"));
+    public Monster (World world, OrthographicCamera camera){
         this.world = world;
-        defineCharacter();
-        //setup character size
-        //characterStand = new TextureRegion(getTexture(),0,0,1, 73);
-        setBounds(0, 0, 16);
-        //setRegion(characterStand);
         this.camera = camera;
 
+        defineMonster();
 
         font.getData().setScale(0.5f);
+
+        info = new Info("monster");
     }
 
-    private void setBounds(int i, int i1, int i2) {
-    }
-
-    public void update(float dt) {
-        if (!isDead) {
-//        set position for knight and body2box
-            setPosition(b2body.getWorldCenter().x, b2body.getWorldCenter().y);
-
-            spriteBatch.setProjectionMatrix(camera.combined);
-            spriteBatch.begin();
-            font.draw(spriteBatch, str, b2body.getWorldCenter().x - 13, b2body.getWorldCenter().y + 15);
-            spriteBatch.end();
-
-            Vector2 distanceToPlayer = b2body.getWorldCenter().add(Player.currentPos.scl(-1));
-
-            if (distanceToPlayer.len() < 80 && distanceToPlayer.len() > 10)
-                b2body.setLinearVelocity(distanceToPlayer.nor().scl(-35));
-            else
-                b2body.setLinearVelocity(Vector2.Zero);
-        }
-    }
-
-    public void defineCharacter(){
+    public void defineMonster(){
         BodyDef bdef = new BodyDef();
         bdef.position.set(380, 120);
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -97,6 +56,36 @@ public class Monster extends Sprite{
         b2body.createFixture(fdef).setUserData(this);
     }
 
+    public void update(float dt) {
+        setPosition(b2body.getWorldCenter().x, b2body.getWorldCenter().y);
+
+        if (!isDead) {
+            chasePlayer();
+            render();
+        }
+    }
+
+    private void chasePlayer(){
+        Vector2 distanceToPlayer = b2body.getWorldCenter().add(Player.currentPos.scl(-1));
+
+        if (distanceToPlayer.len() < RANGE && distanceToPlayer.len() > 10)
+            b2body.setLinearVelocity(distanceToPlayer.nor().scl(-SPEED));
+        else
+            b2body.setLinearVelocity(Vector2.Zero);
+    }
+
+    private void render(){
+        spriteBatch.setProjectionMatrix(camera.combined);
+        Texture texture = new Texture("01-generic.png");
+        Sprite sprite = new Sprite(texture, 0, 64, 16, 16);
+        sprite.setPosition(b2body.getWorldCenter().x - 8, b2body.getWorldCenter().y - 8);
+
+        spriteBatch.begin();
+        font.draw(spriteBatch, str, b2body.getWorldCenter().x - 13, b2body.getWorldCenter().y + 15);
+        sprite.draw(spriteBatch);
+        spriteBatch.end();
+    }
+
     public void healthUpdate(int damage){
         if(health > 0)
             health -= damage;
@@ -108,7 +97,22 @@ public class Monster extends Sprite{
     private void isDead(){
         //Gdx.app.log("Im dead", "");
         isDead = true;
-        WorldContactListener.bodiesToDestroy.add(b2body);
+        PlayScreen.addBodyToDestroy(b2body);
         str = "";
+    }
+
+    @Override
+    public void onContact(Contactable object) {
+
+    }
+
+    @Override
+    public void offContact(Contactable object) {
+
+    }
+
+    @Override
+    public Info getInfo() {
+        return info;
     }
 }

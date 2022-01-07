@@ -1,20 +1,32 @@
 package com.badlogic.soulknight.Tools;
 
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class B2WorldCreator {
+public class B2WorldCreator implements Contactable{
+    private World world;
+    private TiledMap map;
+
+    private Info info = new Info("wall");
+
     public B2WorldCreator(World world, TiledMap map){
+        this.world = world;
+        this.map = map;
+
+        createRectangle(8);
+        createRectangle(9);
+    }
+
+    void createRectangle(int layer){
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-        for(MapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+        for(RectangleMapObject object : map.getLayers().get(layer).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = object.getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
             bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
@@ -23,20 +35,22 @@ public class B2WorldCreator {
 
             shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
             fdef.shape = shape;
-            body.createFixture(fdef);
+            body.createFixture(fdef).setUserData(this);
         }
+    }
 
-        for(MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+    @Override
+    public void onContact(Contactable object) {
 
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+    }
 
-            body = world.createBody(bdef);
+    @Override
+    public void offContact(Contactable object) {
 
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
+    }
+
+    @Override
+    public Info getInfo() {
+        return info;
     }
 }

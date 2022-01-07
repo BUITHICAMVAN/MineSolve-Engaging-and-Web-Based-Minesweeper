@@ -24,9 +24,11 @@ import com.badlogic.soulknight.Sprites.Player;
 import com.badlogic.soulknight.Tools.B2WorldCreator;
 import com.badlogic.soulknight.Tools.WorldContactListener;
 
+import java.util.ArrayList;
+
 public class PlayScreen implements Screen {
     private SoulKnight game;
-    // loads images from TexturePacker
+    // load images from TexturePacker
     private TextureAtlas atlas;
 
     //  viewport
@@ -45,6 +47,7 @@ public class PlayScreen implements Screen {
     private Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     private WorldContactListener worldContactListener;
     private Monster monster;
+    private static ArrayList<Body> bodiesToDestroy = new ArrayList();
 
     private Music music;
 
@@ -64,17 +67,17 @@ public class PlayScreen implements Screen {
 
         camera.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-// setup a non-gravitational environment, state remains still at first
+        // setup a non-gravitational environment, state remains still at first
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
 
         new B2WorldCreator(world, map);
 
         //create knight in game world
-        player = new Player(world, this, mousePos);
-        monster = new Monster(world, this, camera);
+        player = new Player(world, mousePos, camera);
+        monster = new Monster(world, camera);
 
-        worldContactListener = new WorldContactListener(hud);
+        worldContactListener = new WorldContactListener();
         world.setContactListener(worldContactListener);
 
         music = SoulKnight.manager.get("audio/music/Dungeon.mp3");
@@ -82,45 +85,15 @@ public class PlayScreen implements Screen {
         music.play();
     }
 
-    //  setup the camera so that for each of the movement using W,A,S,D key
-    //  the camera will follow the knight
-    public void handleInput(float dt){
-        if(Player.gameOver == false) {
-            boolean keyIsPressed = false;
-            if (Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 100) {
-                player.b2body.applyLinearImpulse(new Vector2(16f, 0), player.b2body.getWorldCenter(), true);
-                keyIsPressed = true;
-            }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.A) && player.b2body.getLinearVelocity().x >= -100) {
-                player.b2body.applyLinearImpulse(new Vector2(-16f, 0), player.b2body.getWorldCenter(), true);
-                keyIsPressed = true;
-            }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.W) && player.b2body.getLinearVelocity().y <= 100) {
-                player.b2body.applyLinearImpulse(new Vector2(0, 16f), player.b2body.getWorldCenter(), true);
-                keyIsPressed = true;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.S) && player.b2body.getLinearVelocity().y >= -100) {
-                player.b2body.applyLinearImpulse(new Vector2(0, -16f), player.b2body.getWorldCenter().add(new Vector2(10f, -10f)), true);
-                keyIsPressed = true;
-            }
-
-            if (!keyIsPressed)
-                player.b2body.applyLinearImpulse(player.b2body.getLinearVelocity().scl((float) -0.2), player.b2body.getWorldCenter(), true);
-        }
+    public static void addBodyToDestroy(Body body) {
+        bodiesToDestroy.add(body);
     }
 
     public void update(float dt){
-        handleInput(dt);
-
 //        take 1 step
         world.step(1/60f, 6, 2);
 
-        if(!world.isLocked())
-            for(Body body : worldContactListener.bodiesToDestroy)
-                world.destroyBody(body);
-
-        worldContactListener.bodiesToDestroy.clear();
+        destroyBodies();
 
         player.update(dt);
 
@@ -137,6 +110,14 @@ public class PlayScreen implements Screen {
         hud.update(dt);
     }
 
+    private void destroyBodies(){
+        if(!world.isLocked())
+            for(Body body : bodiesToDestroy)
+                world.destroyBody(body);
+
+        bodiesToDestroy.clear();
+    }
+
     public TextureAtlas getAtlas() {
         return atlas;
     }
@@ -148,43 +129,26 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        update(delta);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-// render game map
+        // render game map
         renderer.render();
         monster.update(delta);
-//render Box2DDebugLines
+        update(delta);
+        //render Box2DDebugLines
         b2dr.render(world, camera.combined);
-        /*
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        player.draw(game.batch);
-        game.batch.end();
 
-//        set batch to draw what Hud camera sees
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-*/
         hud.stage.draw();
 
-        SpriteBatch spriteBatch = new SpriteBatch();
-        spriteBatch.setProjectionMatrix(camera.combined);
-        Texture texture = new Texture("01-generic.png");
-        Sprite sprite = new Sprite(texture, 0, 0, 16, 16);
-        sprite.setPosition(player.b2body.getWorldCenter().x - 8, player.b2body.getWorldCenter().y - 8);
-
-        spriteBatch.begin();
-        sprite.draw(spriteBatch);
-        spriteBatch.end();
-
         if (Player.gameOver){
-            SpriteBatch spriteBatch2 = new SpriteBatch();
+            SpriteBatch spriteBatch = new SpriteBatch();
             Texture textureGO = new Texture("game-over-typography-pic-1600x900.jpg");
             Sprite spriteGO = new Sprite(textureGO, 0, 0, 1600, 900);
 
-            spriteBatch2.begin();
-            spriteGO.draw(spriteBatch2);
-            spriteBatch2.end();
+            spriteBatch.begin();
+            spriteGO.draw(spriteBatch);
+            spriteBatch.end();
 
             music.pause();
 
