@@ -76,8 +76,8 @@ public class Monster extends Sprite implements Contactable {
 
     private void render(){
         spriteBatch.setProjectionMatrix(camera.combined);
-        Texture texture = new Texture("01-generic.png");
-        Sprite sprite = new Sprite(texture, 0, 64, 16, 16);
+        Texture texture = new Texture("Knight_Monster.png");
+        Sprite sprite = new Sprite(texture, 35, 14, 16, 16);
         sprite.setPosition(b2body.getWorldCenter().x - 8, b2body.getWorldCenter().y - 8);
 
         spriteBatch.begin();
