@@ -1,0 +1,89 @@
+
+Knight_Monster.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Sprite_The_Giant
+  rotate: false
+  xy: 1, 1
+  size: 32, 30
+  orig: 32, 30
+  offset: 0, 0
+  index: -1
+Sprite_Haunted
+  rotate: false
+  xy: 35, 14
+  size: 17, 17
+  orig: 17, 17
+  offset: 0, 0
+  index: -1
+Sprite_Skeleton_King_alt
+  rotate: false
+  xy: 54, 14
+  size: 17, 17
+  orig: 17, 17
+  offset: 0, 0
+  index: -1
+Alchemist_icon
+  rotate: false
+  xy: 73, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+Knight_icon
+  rotate: false
+  xy: 91, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+Paladin_icon
+  rotate: false
+  xy: 109, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+Sprite_bigskeleton
+  rotate: false
+  xy: 127, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+Sprite_Dark_Grand_Knight
+  rotate: false
+  xy: 145, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+Sprite_Dark_Knight
+  rotate: false
+  xy: 163, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+Sprite_Goblin
+  rotate: false
+  xy: 181, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+Sprite_Gold_Mask
+  rotate: false
+  xy: 199, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+Sprite_Grand_Slime
+  rotate: false
+  xy: 217, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
