@@ -2,6 +2,7 @@ package com.badlogic.soulknight.Screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -22,6 +23,10 @@ public class IntroScreen implements Screen {
 
     private Game game;
     private Music music;
+
+    SpriteBatch spriteBatch = new SpriteBatch();
+    Texture textureGO = new Texture("Menu.PNG");
+    Sprite spriteGO = new Sprite(textureGO, 0, 0, 1600, 900);
 
     public IntroScreen(Game game){
         this.game = game;
@@ -44,16 +49,15 @@ public class IntroScreen implements Screen {
             dispose();
         }
 
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        SpriteBatch spriteBatch = new SpriteBatch();
-        Texture textureGO = new Texture("Menu.PNG");
-        Sprite spriteGO = new Sprite(textureGO, 0, 0, 1600, 900);
 
         spriteBatch.begin();
         spriteGO.draw(spriteBatch);
         spriteBatch.end();
+
+
     }
 
     @Override

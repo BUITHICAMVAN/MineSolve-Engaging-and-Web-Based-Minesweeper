@@ -1,4 +1,4 @@
-package com.badlogic.soulknight.Sprites;
+package com.badlogic.soulknight.Sprites.Monster;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,13 +11,15 @@ import com.badlogic.soulknight.Screens.PlayScreen;
 import com.badlogic.soulknight.Tools.Contactable;
 import com.badlogic.soulknight.Tools.Info;
 
-public class Monster extends Sprite implements Contactable {
+public abstract class Monster extends Sprite implements Contactable {
     public World world;
     public Body b2body;
+    protected Vector2 currentPos;
+    private Vector2 startPos;
 
-    private int health = 10;
-    private final float SPEED = 35f;
-    private final float RANGE = 80f;
+    protected int health = 10;
+    protected float SPEED;
+    protected float RANGE;
 
     private OrthographicCamera camera;
 
@@ -25,13 +27,14 @@ public class Monster extends Sprite implements Contactable {
     BitmapFont font = new BitmapFont();
     CharSequence str = "Monster";
 
-    private boolean isDead = false;
+    protected boolean isDead = false;
 
     private Info info;
 
-    public Monster (World world, OrthographicCamera camera){
+    public Monster (World world, OrthographicCamera camera, Vector2 startPos){
         this.world = world;
         this.camera = camera;
+        this.startPos = startPos;
 
         defineMonster();
 
@@ -42,9 +45,10 @@ public class Monster extends Sprite implements Contactable {
 
     public void defineMonster(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(380, 120);
+        bdef.position.set(startPos);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
+        currentPos = b2body.getWorldCenter();
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
@@ -56,25 +60,9 @@ public class Monster extends Sprite implements Contactable {
         b2body.createFixture(fdef).setUserData(this);
     }
 
-    public void update(float dt) {
-        setPosition(b2body.getWorldCenter().x, b2body.getWorldCenter().y);
+    public abstract void update(float dt);
 
-        if (!isDead) {
-            chasePlayer();
-            render();
-        }
-    }
-
-    private void chasePlayer(){
-        Vector2 distanceToPlayer = b2body.getWorldCenter().add(Player.currentPos.scl(-1));
-
-        if (distanceToPlayer.len() < RANGE && distanceToPlayer.len() > 10)
-            b2body.setLinearVelocity(distanceToPlayer.nor().scl(-SPEED));
-        else
-            b2body.setLinearVelocity(Vector2.Zero);
-    }
-
-    private void render(){
+    protected void render(){
         spriteBatch.setProjectionMatrix(camera.combined);
         Texture texture = new Texture("Knight_Monster.png");
         Sprite sprite = new Sprite(texture, 35, 14, 16, 16);
@@ -90,12 +78,11 @@ public class Monster extends Sprite implements Contactable {
         if(health > 0)
             health -= damage;
 
-        if(health == 0)
+        if(health <= 0)
             isDead();
     }
 
     private void isDead(){
-        //Gdx.app.log("Im dead", "");
         isDead = true;
         PlayScreen.addBodyToDestroy(b2body);
         str = "";

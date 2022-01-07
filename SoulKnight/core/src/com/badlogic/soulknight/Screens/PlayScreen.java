@@ -1,13 +1,9 @@
 package com.badlogic.soulknight.Screens;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -19,7 +15,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.soulknight.Scenes.Hud;
 import com.badlogic.soulknight.SoulKnight;
-import com.badlogic.soulknight.Sprites.Monster;
+import com.badlogic.soulknight.Sprites.Monster.Chaser;
+import com.badlogic.soulknight.Sprites.Monster.Monster;
+import com.badlogic.soulknight.Sprites.Monster.Shooter;
 import com.badlogic.soulknight.Sprites.Player;
 import com.badlogic.soulknight.Tools.B2WorldCreator;
 import com.badlogic.soulknight.Tools.WorldContactListener;
@@ -47,6 +45,7 @@ public class PlayScreen implements Screen {
     private Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     private WorldContactListener worldContactListener;
     private Monster monster;
+    private Monster monster2;
     private static ArrayList<Body> bodiesToDestroy = new ArrayList();
 
     private Music music;
@@ -75,7 +74,8 @@ public class PlayScreen implements Screen {
 
         //create knight in game world
         player = new Player(world, mousePos, camera);
-        monster = new Monster(world, camera);
+        monster = new Chaser(world, camera, new Vector2(380, 120));
+        monster2 = new Shooter(world, camera, new Vector2(200, 150));
 
         hud.setPlayer(player);
 
@@ -98,6 +98,8 @@ public class PlayScreen implements Screen {
         destroyBodies();
 
         player.update(dt);
+        monster.update(dt);
+        monster2.update(dt);
 
 //        attach gamecam to players.x coordinate, the camera move horizontally
         camera.position.x = player.b2body.getPosition().x;
@@ -136,7 +138,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // render game map
         renderer.render();
-        monster.update(delta);
+
         update(delta);
         //render Box2DDebugLines
         b2dr.render(world, camera.combined);

@@ -1,7 +1,6 @@
 package com.badlogic.soulknight.Sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.soulknight.SoulKnight;
 import com.badlogic.soulknight.Tools.Contactable;
 import com.badlogic.soulknight.Tools.Gun;
 import com.badlogic.soulknight.Tools.Info;
@@ -36,6 +34,7 @@ public class Player extends Sprite implements Contactable {
     //private final TextureRegion characterStand;
 
     public int health = 10;
+    private float switchTimer = 0;
     private Gun currentGun;
     private Pistol pistol = new Pistol();
     private Shotgun shotgun = new Shotgun();
@@ -105,7 +104,7 @@ public class Player extends Sprite implements Contactable {
             handleInput();
             attack(dt);
             takeDamage(dt);
-            switchWeapon();
+            switchWeapon(dt);
         }
 
         render();
@@ -148,18 +147,23 @@ public class Player extends Sprite implements Contactable {
     void attack(float dt){
         timer += dt;
 
-        if(Gdx.input.isTouched() && timer > 0.7 && !gameOver){
+        if(Gdx.input.isTouched() && timer > currentGun.getFirerate() && !gameOver){
             timer = 0;
             currentGun.fire(world, currentPos, new Vector2(mousePos.x, mousePos.y).scl(-1).add(currentPos).scl(-1).nor());
         }
     }
 
-    void switchWeapon(){
-        if(Gdx.input.isKeyPressed(Input.Keys.Q))
-            if(currentGun instanceof Shotgun)
+    void switchWeapon(float dt){
+        switchTimer += dt;
+
+        if(Gdx.input.isKeyPressed(Input.Keys.Q) && switchTimer > 0.2f) {
+            switchTimer = 0;
+
+            if (currentGun instanceof Shotgun)
                 currentGun = pistol;
             else
                 currentGun = shotgun;
+        }
     }
 
     void takeDamage(float dt){
@@ -190,6 +194,9 @@ public class Player extends Sprite implements Contactable {
         if(objInfo != null) {
             if (objInfo.getType() == "monster")
                 setAttacked(true);
+
+            if(objInfo.getType() == "enemyBullet")
+                healthUpdate(1);
         }
     }
 
