@@ -12,10 +12,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.soulknight.SoulKnight;
 import com.badlogic.soulknight.Sprites.Player;
 
-// class Hud displays world time, onscreen-controller button, bullet capacity, HEALTH, warnings,...
+// class Hud displays world time, onscreen-controller button, bullet capacity, health, warnings,...
 public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
+    private Player player;
 
     // what should be display on the HUD screen
     private int worldTimer;
@@ -46,7 +47,7 @@ public class Hud implements Disposable {
 
         // setup label display
         countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        healthLabel = new Label(String.format("HP %d/10", Player.HEALTH), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        healthLabel = new Label(String.format("HP %d/10", 0), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         levelLabel = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("Dungeon 1",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -66,8 +67,12 @@ public class Hud implements Disposable {
         stage.addActor(table);
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public void update(float dt){
-        healthLabel.setText(String.format("HP %d/10", Player.HEALTH));
+        healthLabel.setText(String.format("HP %d/10", player.getHealth()));
 
         timeCount += dt;
 

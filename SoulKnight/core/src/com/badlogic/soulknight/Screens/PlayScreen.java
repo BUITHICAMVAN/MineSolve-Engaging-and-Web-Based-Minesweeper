@@ -77,6 +77,8 @@ public class PlayScreen implements Screen {
         player = new Player(world, mousePos, camera);
         monster = new Monster(world, camera);
 
+        hud.setPlayer(player);
+
         worldContactListener = new WorldContactListener();
         world.setContactListener(worldContactListener);
 
@@ -141,20 +143,11 @@ public class PlayScreen implements Screen {
 
         hud.stage.draw();
 
-        if (Player.gameOver){
-            SpriteBatch spriteBatch = new SpriteBatch();
-            Texture textureGO = new Texture("game-over-typography-pic-1600x900.jpg");
-            Sprite spriteGO = new Sprite(textureGO, 0, 0, 1600, 900);
-
-            spriteBatch.begin();
-            spriteGO.draw(spriteBatch);
-            spriteBatch.end();
-
-            music.pause();
-
-            music = SoulKnight.manager.get("audio/music/LivingRoom.mp3", Music.class);
-            music.setLooping(true);
-            music.play();
+        if (player.getGameOver()){
+            Gdx.app.log("GameOver", "");
+            music.stop();
+            game.setScreen(new GameOverScreen(game));
+            dispose();
         }
 
 

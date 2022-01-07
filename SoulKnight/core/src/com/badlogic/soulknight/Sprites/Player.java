@@ -1,6 +1,7 @@
 package com.badlogic.soulknight.Sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.soulknight.Screens.PlayScreen;
+import com.badlogic.soulknight.SoulKnight;
 import com.badlogic.soulknight.Tools.Contactable;
 import com.badlogic.soulknight.Tools.Info;
 
@@ -30,16 +31,18 @@ public class Player extends Sprite implements Contactable {
     private float timer;
     private final float ICD = 0.6f;
     private float ICDTimer;
-    private static boolean isAttacked = false;
+    private boolean isAttacked = false;
     //private final TextureRegion characterStand;
 
-    public static int HEALTH = 10;
+    public int health = 10;
 
     //Movement variables
     private final float SPEED_ACCELERATION = 16f;
     private final float MAX_SPEED = 85f;
 
-    public static boolean gameOver = false;
+    Music attackSound = SoulKnight.manager.get("audio/sounds/BulletSound.wav");
+
+    public boolean gameOver = false;
 
     public Player (World world, Vector3 mousePos, OrthographicCamera camera){
         //super(screen.getAtlas().findRegion("KnightTexture"));
@@ -54,6 +57,7 @@ public class Player extends Sprite implements Contactable {
 
         info = new Info("player");
 
+        attackSound.setVolume(0.6f);
     }
 
     @Override
@@ -61,8 +65,16 @@ public class Player extends Sprite implements Contactable {
         return info;
     }
 
-    public static void setAttacked(boolean attacked) {
+    public int getHealth(){
+        return health;
+    }
+
+    public void setAttacked(boolean attacked) {
         isAttacked = attacked;
+    }
+
+    public boolean getGameOver(){
+        return gameOver;
     }
 
     public void defineCharacter(){
@@ -132,9 +144,11 @@ public class Player extends Sprite implements Contactable {
     void attack(float dt){
         timer += dt;
 
-        if(Gdx.input.isTouched() && timer > 0.3 && !gameOver){
+        if(Gdx.input.isTouched() && timer > 0.7 && !gameOver){
             timer = 0;
-            new Bullet(world, currentPos, new Vector2(mousePos.x, mousePos.y).add(currentPos.scl(-1)).nor().scl(180));
+            new Bullet(world, currentPos, new Vector2(mousePos.x, mousePos.y).add(currentPos.scl(-1)).nor().scl(250));
+
+            attackSound.play();
         }
     }
 
@@ -146,16 +160,16 @@ public class Player extends Sprite implements Contactable {
         }
     }
 
-    public static void healthUpdate(int damage){
-        if(HEALTH > 0) {
-            HEALTH -= damage;
+    public void healthUpdate(int damage){
+        if(health > 0) {
+            health -= damage;
         }
 
-        if(HEALTH == 0)
+        if(health == 0)
             gameOver();
     }
 
-    public static void gameOver(){
+    public void gameOver(){
         gameOver = true;
     }
 
@@ -165,7 +179,7 @@ public class Player extends Sprite implements Contactable {
 
         if(objInfo != null) {
             if (objInfo.getType() == "monster")
-                Player.setAttacked(true);
+                setAttacked(true);
         }
     }
 
@@ -175,7 +189,7 @@ public class Player extends Sprite implements Contactable {
 
         if(objInfo != null) {
             if (objInfo.getType() == "monster")
-                Player.setAttacked(false);
+                setAttacked(false);
         }
     }
 }
