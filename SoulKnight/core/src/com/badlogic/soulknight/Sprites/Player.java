@@ -24,8 +24,8 @@ public class Player extends Sprite implements Contactable {
     private Vector3 mousePos;
 
     private SpriteBatch spriteBatch = new SpriteBatch();
-    private Texture texture = new Texture("01-generic.png");
-    private Sprite sprite = new Sprite(texture, 0, 0, 16, 16);
+    private Texture texture = new Texture("Knight_Monster.png");
+    private Sprite sprite = new Sprite(texture, 91, 15, 16, 16);
 
     private Info info;
 
