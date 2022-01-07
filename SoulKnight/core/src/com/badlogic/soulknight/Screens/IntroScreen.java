@@ -48,7 +48,7 @@ public class IntroScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         SpriteBatch spriteBatch = new SpriteBatch();
-        Texture textureGO = new Texture("Menu.png");
+        Texture textureGO = new Texture("Menu.PNG");
         Sprite spriteGO = new Sprite(textureGO, 0, 0, 1600, 900);
 
         spriteBatch.begin();
