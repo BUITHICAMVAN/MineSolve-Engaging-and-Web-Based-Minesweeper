@@ -7,7 +7,9 @@ import com.badlogic.soulknight.Tools.Contactable;
 import com.badlogic.soulknight.Tools.Info;
 
 public class EnemyBullet extends Bullet{
+
     public EnemyBullet(World world, Vector2 startPos, Vector2 direction, int damage, int range) {
+
         super((short) 4, (short) (1 | 2), world, startPos, direction, damage, range);
 
         info = new Info("enemyBullet");
@@ -16,5 +18,6 @@ public class EnemyBullet extends Bullet{
     @Override
     public void onContact(Contactable object) {
         PlayScreen.addBodyToDestroy(bulletBody);
+        Bullet.bullets.remove(this);
     }
 }

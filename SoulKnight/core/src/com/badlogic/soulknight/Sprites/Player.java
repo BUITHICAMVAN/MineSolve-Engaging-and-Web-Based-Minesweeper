@@ -88,7 +88,7 @@ public class Player extends Sprite implements Contactable {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(5);
+        shape.setRadius(7);
 
         fdef.shape = shape;
         fdef.filter.categoryBits = 2;

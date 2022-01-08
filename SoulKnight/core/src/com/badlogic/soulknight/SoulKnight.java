@@ -21,6 +21,7 @@ public class SoulKnight extends Game {
 		manager = new AssetManager();
 		manager.load("audio/music/Dungeon.mp3", Music.class);
 		manager.load("audio/music/LivingRoom.mp3", Music.class);
+		manager.load("audio/music/Easter.mp3", Music.class);
 		manager.load("audio/sounds/PistolSound.mp3", Music.class);
 		manager.load("audio/sounds/ShotgunSound2.wav", Music.class);
 		manager.finishLoading();

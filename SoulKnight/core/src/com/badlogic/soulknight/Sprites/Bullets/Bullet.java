@@ -1,11 +1,17 @@
 package com.badlogic.soulknight.Sprites.Bullets;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.soulknight.Screens.PlayScreen;
 import com.badlogic.soulknight.Tools.Contactable;
 import com.badlogic.soulknight.Tools.Info;
 
-public abstract class Bullet implements Contactable {
+import java.util.ArrayList;
+
+public abstract class Bullet extends Sprite implements Contactable {
     protected Info info;
     protected Body bulletBody;
     protected FixtureDef fdef;
@@ -13,7 +19,13 @@ public abstract class Bullet implements Contactable {
     protected int damage;
     private int range;
 
+    protected static ArrayList<Bullet> bullets = new ArrayList<>();
+    private static SpriteBatch spriteBatch = new SpriteBatch();
+    protected static Texture texture = new Texture("0x72_16x16DungeonTileset.v4.png");
+    private static Sprite sprite = new Sprite(texture, 80, 128, 5, 5);
+
     public Bullet(short catBit, short maskBit, World world, Vector2 startPos, Vector2 direction, int damage, int range){
+        super(sprite);
         this.damage = damage;
         this.range = range;
 
@@ -34,13 +46,26 @@ public abstract class Bullet implements Contactable {
         bulletBody.createFixture(fdef).setUserData(this);
 
         bulletBody.setLinearVelocity(direction);
+
+        bullets.add(this);
     }
 
     public void update(){
-
+        setPosition(bulletBody.getWorldCenter().x - 2.5f, bulletBody.getWorldCenter().y - 2.5f);
     }
 
     public abstract void onContact(Contactable object);
+
+    public static void render(){
+        spriteBatch.setProjectionMatrix(PlayScreen.getCamera().combined);
+
+        spriteBatch.begin();
+        for(Bullet bullet : bullets) {
+            bullet.update();
+            bullet.draw(spriteBatch);
+        }
+        spriteBatch.end();
+    }
 
     @Override
     public void offContact(Contactable object) {

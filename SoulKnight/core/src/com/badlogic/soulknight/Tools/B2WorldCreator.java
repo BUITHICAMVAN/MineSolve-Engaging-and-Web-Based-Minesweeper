@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.soulknight.Sprites.WinArea;
 
 public class B2WorldCreator implements Contactable{
     private World world;

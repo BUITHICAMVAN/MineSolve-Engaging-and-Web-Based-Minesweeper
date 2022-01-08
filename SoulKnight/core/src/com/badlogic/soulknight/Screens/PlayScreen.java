@@ -15,10 +15,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.soulknight.Scenes.Hud;
 import com.badlogic.soulknight.SoulKnight;
+import com.badlogic.soulknight.Sprites.Bullets.Bullet;
 import com.badlogic.soulknight.Sprites.Monster.Chaser;
 import com.badlogic.soulknight.Sprites.Monster.Monster;
 import com.badlogic.soulknight.Sprites.Monster.Shooter;
 import com.badlogic.soulknight.Sprites.Player;
+import com.badlogic.soulknight.Sprites.WinArea;
 import com.badlogic.soulknight.Tools.B2WorldCreator;
 import com.badlogic.soulknight.Tools.WorldContactListener;
 
@@ -30,7 +32,7 @@ public class PlayScreen implements Screen {
     private TextureAtlas atlas;
 
     //  viewport
-    private OrthographicCamera camera;
+    private static OrthographicCamera camera;
     private Viewport gamePort;
     private Hud hud;
 
@@ -44,11 +46,10 @@ public class PlayScreen implements Screen {
     private Player player;
     private Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     private WorldContactListener worldContactListener;
-    private Monster monster;
-    private Monster monster2;
     private static ArrayList<Body> bodiesToDestroy = new ArrayList();
 
     private Music music;
+    public boolean win = false;
 
     public PlayScreen(SoulKnight game){
         //put the String to the pack file of image package
@@ -74,8 +75,13 @@ public class PlayScreen implements Screen {
 
         //create knight in game world
         player = new Player(world, mousePos, camera);
-        monster = new Chaser(world, camera, new Vector2(380, 120));
-        monster2 = new Shooter(world, camera, new Vector2(200, 150));
+
+        new Chaser(world, camera, new Vector2(300, 120));
+        new Shooter(world, camera, new Vector2(600, 115));
+        new Chaser(world, camera, new Vector2(380, 150));
+        new Shooter(world, camera, new Vector2(380, 60));
+        new Shooter(world, camera, new Vector2(200, 150));
+
 
         hud.setPlayer(player);
 
@@ -85,6 +91,12 @@ public class PlayScreen implements Screen {
         music = SoulKnight.manager.get("audio/music/Dungeon.mp3");
         music.setLooping(true);
         music.play();
+
+        new WinArea(world, this);
+    }
+
+    public static OrthographicCamera getCamera(){
+        return camera;
     }
 
     public static void addBodyToDestroy(Body body) {
@@ -98,8 +110,7 @@ public class PlayScreen implements Screen {
         destroyBodies();
 
         player.update(dt);
-        monster.update(dt);
-        monster2.update(dt);
+        Monster.updateAll(dt);
 
 //        attach gamecam to players.x coordinate, the camera move horizontally
         camera.position.x = player.b2body.getPosition().x;
@@ -138,21 +149,34 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // render game map
         renderer.render();
+        Bullet.render();
 
         update(delta);
         //render Box2DDebugLines
-        b2dr.render(world, camera.combined);
+        //b2dr.render(world, camera.combined);
 
         hud.stage.draw();
 
+        gameOver();
+        win();
+    }
+
+    private void gameOver(){
         if (player.getGameOver()){
             Gdx.app.log("GameOver", "");
             music.stop();
             game.setScreen(new GameOverScreen(game));
             dispose();
         }
+    }
 
-
+    public void win(){
+        if(win){
+            music.stop();
+            Gdx.app.log("You win", "");
+            game.setScreen(new WinScreen(game));
+            dispose();
+        }
     }
 
     @Override

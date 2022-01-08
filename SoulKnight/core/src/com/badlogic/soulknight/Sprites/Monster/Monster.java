@@ -1,6 +1,5 @@
 package com.badlogic.soulknight.Sprites.Monster;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,7 +11,11 @@ import com.badlogic.soulknight.Screens.PlayScreen;
 import com.badlogic.soulknight.Tools.Contactable;
 import com.badlogic.soulknight.Tools.Info;
 
+import java.util.ArrayList;
+
 public abstract class Monster extends Sprite implements Contactable {
+    private static ArrayList<Monster> monsters = new ArrayList<>();
+
     public World world;
     public Body b2body;
     protected Vector2 currentPos;
@@ -27,6 +30,8 @@ public abstract class Monster extends Sprite implements Contactable {
     SpriteBatch spriteBatch = new SpriteBatch();
     BitmapFont font = new BitmapFont();
     CharSequence str = "Monster";
+    Texture texture = new Texture("Knight_Monster.png");
+    protected Sprite sprite;
 
     protected boolean isDead = false;
 
@@ -42,6 +47,8 @@ public abstract class Monster extends Sprite implements Contactable {
         font.getData().setScale(0.5f);
 
         info = new Info("monster");
+
+        monsters.add(this);
     }
 
     public void defineMonster(){
@@ -53,7 +60,7 @@ public abstract class Monster extends Sprite implements Contactable {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(5);
+        shape.setRadius(6);
 
         fdef.shape = shape;
         fdef.filter.categoryBits = 8;
@@ -65,8 +72,7 @@ public abstract class Monster extends Sprite implements Contactable {
 
     protected void render(){
         spriteBatch.setProjectionMatrix(camera.combined);
-        Texture texture = new Texture("Knight_Monster.png");
-        Sprite sprite = new Sprite(texture, 35, 14, 16, 16);
+
         sprite.setPosition(b2body.getWorldCenter().x - 8, b2body.getWorldCenter().y - 8);
 
         spriteBatch.begin();
@@ -86,7 +92,13 @@ public abstract class Monster extends Sprite implements Contactable {
     private void isDead(){
         isDead = true;
         PlayScreen.addBodyToDestroy(b2body);
+        monsters.remove(this);
         str = "";
+    }
+
+    public static void updateAll(float dt){
+        for(Monster monster : monsters)
+            monster.update(dt);
     }
 
     @Override
